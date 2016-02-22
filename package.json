@@ -1,0 +1,43 @@
+{
+  "name": "changelog-gn",
+  "version": "0.0.0",
+  "description": "Generate a simple changelog for your release.",
+  "license": "MIT",
+  "repository": "Arkni/changelog-generator",
+  "author": {
+    "name": "Brahim Arkni",
+    "email": "brahim.arkni@gmail.com",
+    "url": "github.com/Arkni"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "bin": {
+    "changelog": "cli.js"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js",
+    "cli.js",
+    "presets"
+  ],
+  "keywords": [
+    "git",
+    "github",
+    "changelog",
+    "release"
+  ],
+  "dependencies": {
+    "meow": "^3.7.0",
+    "read-pkg-up": "^1.0.1",
+    "shelljs": "^0.6.0",
+    "strip-eof": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "execa": "^0.2.2",
+    "xo": "*"
+  }
+}
