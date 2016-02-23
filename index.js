@@ -53,7 +53,7 @@ module.exports = function (opts) {
 
 	var base = opts.base && opts.base.trim();
 	if (base) {
-		base = path.resolve(__dirname, base);
+		base = path.resolve(shell.pwd(), base);
 		H.checkDirectory(base);
 		H.log('Changing working directory to ' + chalk.cyan(base) + '.');
 		shell.cd(base);
