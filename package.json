@@ -1,6 +1,6 @@
 {
   "name": "changelog-gn",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Generate a simple changelog for your release.",
   "license": "MIT",
   "repository": "Arkni/changelog-generator",
@@ -10,7 +10,7 @@
     "url": "github.com/Arkni"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "bin": {
     "changelog": "cli.js"

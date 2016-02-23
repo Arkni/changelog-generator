@@ -37,8 +37,8 @@ var Helpers = {
 
 	error: function (msg, code) {
 		var err = chalk.red.bold;
-		this.log(err(msg));
-		this.log(err('Aborting.'));
+		console.log(err(msg));
+		console.log(err('Aborting.'));
 		process.exit(code);
 	},
 
