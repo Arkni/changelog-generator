@@ -11,22 +11,24 @@ const fixtureDefault = [
 	version + ' / ' + today,
 	'==================\n',
 	'  * Another commit',
+	'  * Core: minor tweeks',
 	'  * Event: Remove an internal argument',
 	'  * CSS: Don\'t name the anonymous swap function',
-	'  * Core: Make jQuery objects iterable\n'
+	'  * core: Make jQuery objects iterable\n'
 ].join('\n');
 
 const fixtureJQuery = [
 	'1.0.0 / ' + today,
 	'==================\n',
-	'## Others',
-	'  * Another commit\n',
-	'## Event',
-	'  * Remove an internal argument\n',
 	'## CSS',
 	'  * Don\'t name the anonymous swap function\n',
 	'## Core',
-	'  * Make jQuery objects iterable\n'
+	'  * Minor tweeks',
+	'  * Make jQuery objects iterable\n',
+	'## Event',
+	'  * Remove an internal argument\n',
+	'## Others',
+	'  * Another commit\n'
 ].join('\n');
 
 test.before('Set up the test', () => {
@@ -40,11 +42,13 @@ test.before('Set up the test', () => {
 	shell.exec('git config --local user.email "test@example.org"');
 
 	writeFileSync('test1', '');
-	shell.exec('git add --all && git commit -m "Core: Make jQuery objects iterable"');
+	shell.exec('git add --all && git commit -m "core: Make jQuery objects iterable"');
 	writeFileSync('test2', '');
 	shell.exec('git add --all && git commit -m "CSS: Don\'t name the anonymous swap function"');
 	writeFileSync('test3', '');
 	shell.exec('git add --all && git commit -m "Event: Remove an internal argument"');
+	writeFileSync('test4', '');
+	shell.exec('git add --all && git commit -m "Core: minor tweeks"');
 	writeFileSync('test5', '');
 	shell.exec('git add --all && git commit -m "Another commit"');
 });
@@ -64,6 +68,7 @@ test('Changelog - jQuery preset', t => {
 		release: '1.0.0',
 		preset: 'jquery'
 	});
+
 	t.is(log, fixtureJQuery);
 });
 

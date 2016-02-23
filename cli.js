@@ -17,6 +17,7 @@ var cli = meow({
 		'                     preset. If no preset is specified, then a simple changelog will be generated.',
 		'    -r, --release    The version of the upcoming release. If not specified, the cli will read the version',
 		'                     from `package.json`.',
+		'    -V, --verbose    Output more detailed information',
 		'    -h, --help       Display this notice',
 		'',
 		'Examples',
@@ -30,8 +31,11 @@ var cli = meow({
 		c: 'commitish',
 		h: 'help',
 		p: 'preset',
-		r: 'release'
-	}
+		r: 'release',
+		V: 'verbose'
+	},
+	string: ['base', 'commitish', 'preset', 'release'],
+	boolean: ['verbose']
 });
 
 console.log(changelog(cli.flags));

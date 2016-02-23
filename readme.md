@@ -63,6 +63,13 @@ Default: `x.x.x`
 The version of the upcoming release. If not specified, the lib will ry to read it from `package.json`.<br>
 It's used in the header of the changelog.
 
+##### verbose
+
+Type: `boolean`<br>
+Default: `false`
+
+Output more detailed information.
+
 
 ## CLI
 
@@ -87,6 +94,7 @@ Options
                      preset. If no preset is specified, then a simple changelog will be generated.
     -r, --release    The version of the upcoming release. If not specified, the cli will read the version
                      from `package.json`.
+    -V, --verbose    Output more detailed information
     -h, --help       Display this notice
 
 Examples

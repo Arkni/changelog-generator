@@ -1,25 +1,32 @@
 'use strict';
 
+var H = require('../helpers');
+
 module.exports = function (commits) {
-	var regex = /^(\w+)\s*:/i;
-	var log = {
-		Others: []
-	};
 	var component;
+	var log = {};
+	var output = '';
+	var regex = /^([^:]+):/;
 
 	commits.forEach(function (commit) {
-		component = 'Others';
 		if (regex.test(commit)) {
-			component = regex.exec(commit)[1];
-			component = component.charAt(0).toUpperCase() + component.slice(1);
+			component = H.capitalize(regex.exec(commit)[1]);
 			commit = commit.replace(regex, '').trim();
-			if (!log[component]) {
-				log[component] = [];
-			}
+		} else {
+			component = 'Others';
 		}
-		commit = commit.charAt(0).toUpperCase() + commit.slice(1);
+
+		if (!log[component]) {
+			log[component] = [];
+		}
+
+		commit = H.capitalize(commit);
 		log[component].push(commit.trim());
 	});
 
-	return log;
+	Object.keys(log).sort().forEach(function (key) {
+		output += H.format(log[key], key);
+	});
+
+	return output;
 };

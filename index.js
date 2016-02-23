@@ -1,16 +1,10 @@
 'use strict';
 
-var readPkg = require('read-pkg-up').sync;
+var chalk = require('chalk');
+var H = require('./helpers');
+var path = require('path');
 var stripEof = require('strip-eof');
 var shell = require('shelljs');
-
-function checkGitRepo() {
-	shell.config.silent = true;
-	var rs = shell.exec('git rev-parse');
-	if (rs.code !== 0) {
-		error(stripEof(rs.stderr), 1);
-	}
-}
 
 function getTag() {
 	var rs = shell.exec('git rev-list --tags --max-count=1');
@@ -20,8 +14,13 @@ function getTag() {
 	}
 
 	var commitHash = stripEof(rs.stdout);
+	rs = shell.exec('git describe --tags ' + commitHash);
 
-	return stripEof(shell.exec('git describe --tags ' + commitHash).stdout);
+	if (rs.code !== 0) {
+		H.error(stripEof(rs.stderr.split(/\r?\n/)[0]), rs.code || 1);
+	}
+
+	return stripEof(rs.stdout);
 }
 
 function getLog(commitish) {
@@ -33,63 +32,65 @@ function getLog(commitish) {
 		commitish = tag && tag + '..HEAD';
 	}
 
+	H.log('Getting the list of commits...');
 	cmd = 'git log ' + commitish + ' --no-merges --pretty=format:\'%s\'';
 	rs = shell.exec(cmd);
 
 	if (rs.code !== 0) {
-		error(stripEof(rs.stderr), rs.code || 1);
+		H.error(stripEof(rs.stderr.split(/\r?\n/)[0]), rs.code || 1);
 	}
 
 	return stripEof(rs.stdout);
 }
 
-function getVersion() {
-	var pkg = readPkg().pkg;
-	var version = pkg && pkg.version || 'x.x.x';
-	return version.replace('-pre', '');
-}
-
-function today() {
-	return new Date().toISOString().replace(/T.+/, '');
-}
-
-function format(commits, component) {
-	var str = component ? '## ' + component + '\n' : '';
-	return str + commits.map(function (commit) {
-		return '  * ' + commit;
-	}).join('\n') + '\n\n';
-}
-
-function error(msg, code) {
-	console.error(msg);
-	process.exit(code);
-}
-
 module.exports = function (opts) {
 	opts = opts || {};
-	if (opts.base) {
-		process.chdir(opts.base);
-	}
+	shell.config.silent = true;
+	H.verbose = opts.verbose;
 
-	checkGitRepo();
+	H.section('Checking git repository');
+	H.checkGitExec();
 
-	var commits = getLog(opts.commitish).split(/\r?\n/);
-	var release = opts.release || getVersion();
-	var output = release + ' / ' + today() + '\n==================\n\n';
-	var log;
-
-	if (typeof opts.preset === 'string' && opts.preset.trim()) {
-		try {
-			log = require('./presets/' + opts.preset.toLowerCase())(commits);
-			Object.keys(log).forEach(function (key) {
-				output += format(log[key], key);
-			});
-		} catch (err) {
-			error('ERROR: Preset: "' + opts.preset + '" does not exist', 1);
-		}
+	var base = opts.base && opts.base.trim();
+	if (base) {
+		base = path.resolve(__dirname, base);
+		H.checkDirectory(base);
+		H.log('Changing working directory to ' + chalk.cyan(base) + '.');
+		shell.cd(base);
 	} else {
-		output += format(commits);
+		H.log('Using the current working directory as the base.');
 	}
+
+	H.checkGitRepo();
+
+	H.section('Checking preset');
+
+	var preset = opts.preset && opts.preset.trim() || '';
+	var formater;
+	if (preset) {
+		try {
+			formater = require('./presets/' + preset.toLowerCase());
+		} catch (err) {
+			H.error('ERROR: Preset `' + preset + '` doesn\'t exist', 1);
+		}
+		H.log('Using ' + preset + ' preset.');
+	} else {
+		H.log('Using default preset.');
+		formater = H.format;
+	}
+
+	H.section('Gathering commits');
+
+	var commitish = opts.commitish && opts.commitish.trim() || '';
+	var commits = getLog(commitish).split(/\r?\n/);
+	var release = opts.release || H.getVersion();
+	var output = release + ' / ' + H.today() + '\n==================\n\n';
+
+	H.section('Generating changelog');
+
+	output += formater(commits);
+
+	H.log(chalk.green('Done!') + '\n');
 
 	return stripEof(output);
 };
