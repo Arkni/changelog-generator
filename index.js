@@ -4,48 +4,9 @@ var chalk = require('chalk');
 var H = require('./helpers');
 var path = require('path');
 var stripEof = require('strip-eof');
-var shell = require('shelljs');
-
-function getTag() {
-	var rs = shell.exec('git rev-list --tags --max-count=1');
-
-	if (rs.code !== 0) {
-		return '';
-	}
-
-	var commitHash = stripEof(rs.stdout);
-	rs = shell.exec('git describe --tags ' + commitHash);
-
-	if (rs.code !== 0) {
-		H.error(stripEof(rs.stderr.split(/\r?\n/)[0]), rs.code || 1);
-	}
-
-	return stripEof(rs.stdout);
-}
-
-function getLog(commitish) {
-	var tag;
-	var cmd;
-	var rs;
-	if (!commitish) {
-		tag = getTag();
-		commitish = tag && tag + '..HEAD';
-	}
-
-	H.log('Getting the list of commits...');
-	cmd = 'git log ' + commitish + ' --no-merges --pretty=format:\'%s\'';
-	rs = shell.exec(cmd);
-
-	if (rs.code !== 0) {
-		H.error(stripEof(rs.stderr.split(/\r?\n/)[0]), rs.code || 1);
-	}
-
-	return stripEof(rs.stdout);
-}
 
 module.exports = function (opts) {
 	opts = opts || {};
-	shell.config.silent = true;
 	H.verbose = opts.verbose;
 
 	H.section('Checking git repository');
@@ -53,10 +14,10 @@ module.exports = function (opts) {
 
 	var base = opts.base && opts.base.trim();
 	if (base) {
-		base = path.resolve(shell.pwd(), base);
+		base = path.resolve(process.cwd(), base);
 		H.checkDirectory(base);
 		H.log('Changing working directory to ' + chalk.cyan(base) + '.');
-		shell.cd(base);
+		process.chdir(base);
 	} else {
 		H.log('Using the current working directory as the base.');
 	}
@@ -82,7 +43,7 @@ module.exports = function (opts) {
 	H.section('Gathering commits');
 
 	var commitish = opts.commitish && opts.commitish.trim() || '';
-	var commits = getLog(commitish).split(/\r?\n/);
+	var commits = H.getLog(commitish).split(/\r?\n/);
 	var release = opts.release || H.getVersion();
 	var output = release + ' / ' + H.today() + '\n==================\n\n';
 

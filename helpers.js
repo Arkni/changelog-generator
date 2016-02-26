@@ -1,9 +1,9 @@
 'use stict';
 
 var chalk = require('chalk');
+var execSync = require('child_process').execSync;
 var fs = require('fs');
 var readPkg = require('read-pkg-up').sync;
-var shell = require('shelljs');
 var stripEof = require('strip-eof');
 
 var Helpers = {
@@ -22,17 +22,12 @@ var Helpers = {
 	},
 
 	checkGitExec: function () {
-		if (!shell.which('git')) {
-			this.error('Missing required executable: git', 127);
-		}
+		this.exec('git --version', {stdio: 'ignore'}, 'Missing required executable: git');
 	},
 
 	checkGitRepo: function () {
-		this.log('Checking if "' + chalk.cyan(shell.pwd()) + '" is a Git repository ...');
-		var rs = shell.exec('git rev-parse');
-		if (rs.code !== 0) {
-			this.error(stripEof(rs.stderr), 1);
-		}
+		this.log('Checking if "' + chalk.cyan(process.cwd()) + '" is a Git repository ...');
+		this.exec('git rev-parse', {stdio: ['ignore', 'ignore', 'pipe']});
 	},
 
 	error: function (msg, code) {
@@ -42,11 +37,51 @@ var Helpers = {
 		process.exit(code);
 	},
 
+	exec: function (cmd, opts, msg) {
+		try {
+			var rs = execSync(cmd, opts);
+			return rs && stripEof(rs).toString();
+		} catch (e) {
+			this.error(msg || stripEof(e.stderr).toString().split(/\r?\n/)[0], e.status || 1);
+		}
+	},
+
 	format: function (commits, component) {
 		var str = component ? '## ' + component + '\n' : '';
 		return str + commits.map(function (commit) {
 			return '  * ' + commit;
 		}).join('\n') + '\n\n';
+	},
+
+	getLog: function (commitish) {
+		var rs;
+		var tag;
+		if (!commitish) {
+			tag = this.getTag();
+			commitish = tag && tag + '..HEAD';
+		}
+
+		this.log('Getting the list of commits...');
+
+		rs = this.exec('git log ' + commitish + ' --no-merges --pretty=format:"%s"',
+					{stdio: ['ignore', 'pipe', 'pipe']});
+		if (!rs) {
+			this.error('No commits found', 1);
+		}
+
+		return rs;
+	},
+
+	getTag: function () {
+		var commithash;
+		try {
+			commithash = execSync('git rev-list --tags --max-count=1',
+									{stdio: ['ignore', 'pipe', 'ignore']});
+		} catch (e) {
+			return '';
+		}
+
+		return this.exec('git describe --tags ' + commithash);
 	},
 
 	getVersion: function () {
