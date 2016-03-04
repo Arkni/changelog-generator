@@ -76,7 +76,7 @@ var Helpers = {
 		var commithash;
 		try {
 			commithash = execSync('git rev-list --tags --max-count=1',
-									{stdio: ['ignore', 'pipe', 'ignore']});
+						{stdio: ['ignore', 'pipe', 'ignore']});
 		} catch (e) {
 			return '';
 		}
