@@ -25,7 +25,7 @@ module.exports = function (commits) {
 	});
 
 	Object.keys(log).sort().forEach(function (key) {
-		output += H.format(log[key], key);
+		output += '## ' + key + '\n' + H.format(log[key]);
 	});
 
 	return output;

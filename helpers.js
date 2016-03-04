@@ -46,9 +46,8 @@ var Helpers = {
 		}
 	},
 
-	format: function (commits, component) {
-		var str = component ? '## ' + component + '\n' : '';
-		return str + commits.map(function (commit) {
+	format: function (commits) {
+		return commits.map(function (commit) {
 			return '  * ' + commit;
 		}).join('\n') + '\n\n';
 	},
