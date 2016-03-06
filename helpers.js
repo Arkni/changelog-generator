@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var execSync = require('child_process').execSync;
 var fs = require('fs');
 var readPkg = require('read-pkg-up').sync;
+var semver = require('semver');
 var stripEof = require('strip-eof');
 
 var Helpers = {
@@ -83,7 +84,15 @@ var Helpers = {
 		return this.exec('git describe --tags ' + commithash);
 	},
 
-	getVersion: function () {
+	getVersion: function (release) {
+		if (release) {
+			if (semver.valid(release) === null) {
+				this.warn('"' + release + '" is not valid semver. Using the one in `package.json`.\n');
+			} else {
+				return release;
+			}
+		}
+
 		var pkg = readPkg().pkg;
 		var version = pkg && pkg.version || 'x.x.x';
 		return version.replace('-pre', '');
@@ -105,6 +114,10 @@ var Helpers = {
 
 	today: function () {
 		return new Date().toISOString().replace(/T.+/, '');
+	},
+
+	warn: function (msg) {
+		console.log(chalk.yellow('WARN: ' + msg));
 	}
 };
 

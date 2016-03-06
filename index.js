@@ -44,11 +44,11 @@ module.exports = function (opts) {
 
 	var commitish = opts.commitish && opts.commitish.trim() || '';
 	var commits = H.getLog(commitish).split(/\r?\n/);
-	var release = opts.release || H.getVersion();
-	var output = release + ' / ' + H.today() + '\n==================\n\n';
 
 	H.section('Generating changelog');
 
+	var release = H.getVersion(opts.release);
+	var output = release + ' / ' + H.today() + '\n==================\n\n';
 	output += formater(commits);
 
 	H.log(chalk.green('Done!') + '\n');
