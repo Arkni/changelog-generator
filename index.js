@@ -43,13 +43,13 @@ module.exports = function (opts) {
 	H.section('Gathering commits');
 
 	var commitish = opts.commitish && opts.commitish.trim() || '';
-	var commits = H.getLog(commitish).split(/\r?\n/);
+	var commits = H.getLog(commitish, formater.format).split(/\r?\n/);
 
 	H.section('Generating changelog');
 
 	var release = H.getVersion(opts.release);
 	var output = release + ' / ' + H.today() + '\n==================\n\n';
-	output += formater(commits);
+	output += formater(commits, H.getHomePage());
 
 	H.log(chalk.green('Done!') + '\n');
 

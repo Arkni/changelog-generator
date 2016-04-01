@@ -31,6 +31,22 @@ const fixtureJQuery = [
 	'  * Another commit\n'
 ].join('\n');
 
+const fixtureNode = [
+	'1.0.0 / ' + today,
+	'==================\n',
+	'* [[`commit-hash`]](https://github.com/Arkni/changelog-generator/commit/commit-hash) - Another commit',
+	'* [[`commit-hash`]](https://github.com/Arkni/changelog-generator/commit/commit-hash) - **Core:** minor tweeks',
+	'* [[`commit-hash`]](https://github.com/Arkni/changelog-generator/commit/commit-hash) - **Event:** Remove an internal argument',
+	'* [[`commit-hash`]](https://github.com/Arkni/changelog-generator/commit/commit-hash) - **CSS:** Don\'t name the anonymous swap function',
+	'* [[`commit-hash`]](https://github.com/Arkni/changelog-generator/commit/commit-hash) - **core:** Make jQuery objects iterable'
+].join('\n');
+
+function _replaceCommitHash(commit) {
+	return commit
+		.replace(/`(.*)`/gm, '`commit-hash`')
+		.replace(/commit\/([^\)]+)/gm, 'commit/commit-hash');
+}
+
 test.before('Set up the test', () => {
 	shell.config.silent = true;
 	shell.rm('-rf', 'tmp');
@@ -40,6 +56,7 @@ test.before('Set up the test', () => {
 
 	shell.exec('git config --local user.name "Travis-CI"');
 	shell.exec('git config --local user.email "test@example.org"');
+	shell.exec('git remote add origin git@github.com:Arkni/changelog-generator.git');
 
 	writeFileSync('test1', '');
 	shell.exec('git add --all && git commit -m "core: Make jQuery objects iterable"');
@@ -72,6 +89,16 @@ test('Changelog - jQuery preset', t => {
 	t.is(log, fixtureJQuery);
 });
 
+test('Changelog - node preset', t => {
+	let log = fn({
+		release: '1.0.0',
+		preset: 'node'
+	});
+
+	log = _replaceCommitHash(log);
+	t.is(log, fixtureNode);
+});
+
 test('CLI - default options', async t => {
 	const {stdout} = await execa('../cli.js');
 	t.is(stdout, fixtureDefault);
@@ -80,4 +107,11 @@ test('CLI - default options', async t => {
 test('CLI - jQuery preset', async t => {
 	const {stdout} = await execa('../cli.js', ['-r=1.0.0', '-preset=jquery']);
 	t.is(stdout, fixtureJQuery);
+});
+
+test('CLI - node preset', async t => {
+	let {stdout} = await execa('../cli.js', ['-r=1.0.0', '-preset=node']);
+
+	stdout = _replaceCommitHash(stdout);
+	t.is(stdout, fixtureNode);
 });
