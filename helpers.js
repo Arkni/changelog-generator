@@ -101,8 +101,7 @@ var Helpers = {
 	},
 
 	getHomePage: function () {
-		var originUrl = execSync('git config --get remote.origin.url');
-		originUrl = String(originUrl);
+		var originUrl = this.exec('git config --get remote.origin.url');
 
 		return originUrl
 			.replace(':', '/')
