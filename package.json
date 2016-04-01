@@ -1,6 +1,6 @@
 {
   "name": "changelog-gn",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Generate a simple changelog for your release.",
   "license": "MIT",
   "repository": "Arkni/changelog-generator",
