@@ -52,7 +52,7 @@ If there are no tags, then all commit will be included in changelog.
 Type: `string`<br>
 Default: ``
 
-The preset to use in order to generate the change log. `jquery` is the only available preset.<br>
+The preset to use in order to generate the change log. You can chose `jquery` or `node` presets.<br>
 If no preset is specified, then a simple changelog will be generated.
 
 ##### release
@@ -90,8 +90,9 @@ Usage
 Options
     -b, --base       Specify the path of the git repo. By default, all file paths are relative to process.cwd()
     -c, --commitish  The commit-ish from which you want to generate the changelog. Default to `${latest-tag}..HEAD`
-    -p, --preset     The preset to use in order to generate the change log. `jquery` is the only available
-                     preset. If no preset is specified, then a simple changelog will be generated.
+    -p, --preset     The preset to use in order to generate the change log.
+                     You can chose `jquery` or `node` presets.
+                     If no preset is specified, then a simple changelog will be generated.
     -r, --release    The version of the upcoming release. If not specified, the cli will read the version
                      from `package.json`.
     -V, --verbose    Output more detailed information
