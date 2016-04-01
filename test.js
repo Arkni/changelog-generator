@@ -40,6 +40,7 @@ test.before('Set up the test', () => {
 
 	shell.exec('git config --local user.name "Travis-CI"');
 	shell.exec('git config --local user.email "test@example.org"');
+	shell.exec('git remote add origin git@github.com:Arkni/changelog-generator.git');
 
 	writeFileSync('test1', '');
 	shell.exec('git add --all && git commit -m "core: Make jQuery objects iterable"');
