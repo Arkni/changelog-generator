@@ -53,9 +53,11 @@ var Helpers = {
 		}).join('\n') + '\n\n';
 	},
 
-	getLog: function (commitish) {
+	getLog: function (commitish, format) {
 		var rs;
 		var tag;
+		format = format || '%s';
+
 		if (!commitish) {
 			tag = this.getTag();
 			commitish = tag && tag + '..HEAD';
@@ -63,7 +65,7 @@ var Helpers = {
 
 		this.log('Getting the list of commits...');
 
-		rs = this.exec('git log ' + commitish + ' --no-merges --pretty=format:"%s"',
+		rs = this.exec('git log ' + commitish + ' --no-merges --pretty=format:"' + format + '"',
 					{stdio: ['ignore', 'pipe', 'pipe']});
 		if (!rs) {
 			this.error('No commits found', 1);
@@ -96,6 +98,17 @@ var Helpers = {
 		var pkg = readPkg().pkg;
 		var version = pkg && pkg.version || 'x.x.x';
 		return version.replace('-pre', '');
+	},
+
+	getHomePage: function () {
+		var originUrl = execSync('git config --get remote.origin.url');
+		originUrl = String(originUrl);
+
+		return originUrl
+			.replace(':', '/')
+			.replace('git@', 'https://')
+			.replace('.git', '/')
+			.replace(/\n/, '');
 	},
 
 	log: function (msg) {
