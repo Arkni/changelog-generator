@@ -102,12 +102,15 @@ var Helpers = {
 
 	getHomePage: function () {
 		var originUrl = this.exec('git config --get remote.origin.url');
+		var regex = /^git@[^:]+:[^\/]+\/.+/i;
 
-		return originUrl
-			.replace(':', '/')
-			.replace('git@', 'https://')
-			.replace('.git', '/')
-			.replace(/\n/, '');
+		if (regex.test(originUrl)) {
+			originUrl = originUrl
+				.replace(':', '/')
+				.replace('git@', 'https://');
+		}
+
+		return originUrl.replace('.git', '/');
 	},
 
 	log: function (msg) {
