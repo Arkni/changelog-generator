@@ -6,80 +6,32 @@
 ## Install
 
 ```
-$ npm install --save changelog-gn
+$ npm install -g changelog-gn
 ```
 
+## Examples
 
-## Usage
-
-```js
-const changelog = require('changelog-gn');
-
-changelog();
-/* =>
+```
+$ changelog
 1.0.0 / 2016-02-23
 ==================
 
   * 1.0.0
   * initial commit
-*/
+
+$ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1 -b /home/github/a-jq-project
+1.0.1 / 2016-02-23
+==================
+
+## Core
+  * Minor tweeks
+  * Make objects iterable
+
+## Event
+  * Remove an internal argument
 ```
 
-
-## API
-
-### changelog([options])
-
-#### options
-
-##### base
-
-Type: `string`<br>
-Default: `.`
-
-Specify the path of the git repository.
-
-##### commitish
-
-Type: `string`<br>
-Default: `${latest-tag}..HEAD`
-
-The commit-ish from which you want to generate the changelog. Default to `${latest-tag}..HEAD`.<br>
-If there are no tags, then all commit will be included in changelog.
-
-##### preset
-
-Type: `string`<br>
-Default: ``
-
-The preset to use in order to generate the change log. You can chose `jquery` or `node` presets.<br>
-If no preset is specified, then a simple changelog will be generated.
-
-##### release
-
-Type: `string`<br>
-Default: `x.x.x`
-
-The version of the upcoming release. If not specified, the lib will ry to read it from `package.json`.<br>
-It's used in the header of the changelog.
-
-##### verbose
-
-Type: `boolean`<br>
-Default: `false`
-
-Output more detailed information.
-
-
-## CLI
-
-### Install
-
-```
-$ npm install --global changelog-gn
-```
-
-### Usage
+## Usage
 
 ```
 $ changelog --help
@@ -88,12 +40,15 @@ Usage
     $ changelog
 
 Options
-    -b, --base       Specify the path of the git repo. By default, all file paths are relative to process.cwd()
-    -c, --commitish  The commit-ish from which you want to generate the changelog. Default to `${latest-tag}..HEAD`
-    -p, --preset     The preset to use in order to generate the change log. You can chose `jquery` or `node` presets.
-                     If no preset is specified, then a simple changelog will be generated.
-    -r, --release    The version of the upcoming release. If not specified, the cli will read the version
-                     from `package.json`.
+    -b, --base       Specify the path of the git repo. By default, all file paths
+                     are relative to process.cwd()
+    -c, --commitish  The commit-ish from which you want to generate the changelog.
+                     Default to `${latest-tag}..HEAD`
+    -p, --preset     The preset to use in order to generate the change log. You
+                     can chose `jquery` or `node` presets. If no preset is specified,
+                     then a simple changelog will be generated.
+    -r, --release    The version of the upcoming release. If not specified, the cli
+                     will read the version from `package.json`.
     -V, --verbose    Output more detailed information
     -h, --help       Display this notice
 

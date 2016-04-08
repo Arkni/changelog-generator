@@ -1,5 +1,4 @@
 import execa from 'execa';
-import fn from './';
 import shell from 'shelljs';
 import test from 'ava';
 import {version} from './package.json';
@@ -75,41 +74,17 @@ test.after('cleanup', () => {
 	shell.rm('-rf', 'tmp');
 });
 
-test('Changelog - default options', t => {
-	const log = fn();
-	t.is(log, fixtureDefault);
-});
-
-test('Changelog - jQuery preset', t => {
-	const log = fn({
-		release: '1.0.0',
-		preset: 'jquery'
-	});
-
-	t.is(log, fixtureJQuery);
-});
-
-test('Changelog - node preset', t => {
-	let log = fn({
-		release: '1.0.0',
-		preset: 'node'
-	});
-
-	log = _replaceCommitHash(log);
-	t.is(log, fixtureNode);
-});
-
-test('CLI - default options', async t => {
+test('Changelog - default options', async t => {
 	const {stdout} = await execa('../cli.js');
 	t.is(stdout, fixtureDefault);
 });
 
-test('CLI - jQuery preset', async t => {
+test('Changelog - jQuery preset', async t => {
 	const {stdout} = await execa('../cli.js', ['-r=1.0.0', '-preset=jquery']);
 	t.is(stdout, fixtureJQuery);
 });
 
-test('CLI - node preset', async t => {
+test('Changelog - node preset', async t => {
 	let {stdout} = await execa('../cli.js', ['-r=1.0.0', '-preset=node']);
 
 	stdout = _replaceCommitHash(stdout);
