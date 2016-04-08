@@ -9,28 +9,6 @@
 $ npm install -g changelog-gn
 ```
 
-## Examples
-
-```
-$ changelog
-1.0.0 / 2016-02-23
-==================
-
-  * 1.0.0
-  * initial commit
-
-$ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1 -b /home/github/a-jq-project
-1.0.1 / 2016-02-23
-==================
-
-## Core
-  * Minor tweeks
-  * Make objects iterable
-
-## Event
-  * Remove an internal argument
-```
-
 ## Usage
 
 ```
@@ -56,6 +34,28 @@ Examples
     $ changelog
     $ changelog --base /home/github/changelog-generator
     $ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1
+```
+
+## Examples
+
+```
+$ changelog
+1.0.0 / 2016-02-23
+==================
+
+  * 1.0.0
+  * initial commit
+
+$ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1 -b /home/github/a-jq-project
+1.0.1 / 2016-02-23
+==================
+
+## Core
+  * Minor tweeks
+  * Make objects iterable
+
+## Event
+  * Remove an internal argument
 ```
 
 ## License
