@@ -2,8 +2,8 @@
 
 'use strict';
 
-var changelog = require('./');
 var meow = require('meow');
+var changelog = require('./');
 
 var cli = meow({
 	help: [

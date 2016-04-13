@@ -1,9 +1,9 @@
 'use strict';
 
-var chalk = require('chalk');
-var H = require('./helpers');
 var path = require('path');
+var chalk = require('chalk');
 var stripEof = require('strip-eof');
+var H = require('./helpers');
 
 module.exports = function (opts) {
 	opts = opts || {};

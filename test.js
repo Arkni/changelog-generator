@@ -1,8 +1,8 @@
+import {writeFileSync} from 'fs';
 import execa from 'execa';
 import shell from 'shelljs';
 import test from 'ava';
 import {version} from './package.json';
-import {writeFileSync} from 'fs';
 
 const today = new Date().toISOString().replace(/T.+/, '');
 

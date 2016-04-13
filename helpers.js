@@ -1,8 +1,8 @@
 'use stict';
 
-var chalk = require('chalk');
 var execSync = require('child_process').execSync;
 var fs = require('fs');
+var chalk = require('chalk');
 var readPkg = require('read-pkg-up').sync;
 var semver = require('semver');
 var stripEof = require('strip-eof');
