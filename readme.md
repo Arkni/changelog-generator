@@ -56,6 +56,9 @@ $ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1 -b /home/github/a-jq-project
 
 ## Event
   * Remove an internal argument
+
+$ # Prepend the generated changelog to `CHANGELOG.md`
+$ echo -e "$(changelog -p node)\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
 ```
 
 ## License
