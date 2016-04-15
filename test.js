@@ -16,6 +16,17 @@ const fixtureDefault = [
 	'  * core: Make jQuery objects iterable\n'
 ].join('\n');
 
+const fixtureGrunt = [
+	'1.0.0:',
+	'  date: ' + today,
+	'  changes:',
+	'    - Another commit',
+	'    - Core: minor tweeks',
+	'    - Event: Remove an internal argument',
+	'    - CSS: Don\'t name the anonymous swap function',
+	'    - core: Make jQuery objects iterable'
+].join('\n');
+
 const fixtureJQuery = [
 	'1.0.0 / ' + today,
 	'==================\n',
@@ -77,6 +88,11 @@ test.after('cleanup', () => {
 test('Changelog - default options', async t => {
 	const {stdout} = await execa('../cli.js');
 	t.is(stdout, fixtureDefault);
+});
+
+test('Changelog - grunt preset', async t => {
+	const {stdout} = await execa('../cli.js', ['-r=1.0.0', '-preset=grunt']);
+	t.is(stdout, fixtureGrunt);
 });
 
 test('Changelog - jQuery preset', async t => {

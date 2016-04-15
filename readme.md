@@ -23,8 +23,8 @@ Options
     -c, --commitish  The commit-ish from which you want to generate the changelog.
                      Default to `${latest-tag}..HEAD`
     -p, --preset     The preset to use in order to generate the change log. You
-                     can chose `jquery` or `node` presets. If no preset is specified,
-                     then a simple changelog will be generated.
+                     can chose `grunt`, `jquery` or `node` presets. If no preset
+                     is specified, then a simple changelog will be generated.
     -r, --release    The version of the upcoming release. If not specified, the cli
                      will read the version from `package.json`.
     -V, --verbose    Output more detailed information
@@ -56,6 +56,15 @@ $ changelog -c 1.0.0..HEAD -p jquery -r 1.0.1 -b /home/github/a-jq-project
 
 ## Event
   * Remove an internal argument
+
+$ changelog -p grunt
+1.3.0:
+  date: 2016-04-15
+  changes:
+    - Add `Grunt` preset
+    - Refactor
+    - Satisfy XO -_-
+    - Add `Prepend to CHANGELOG.md` example (@wbruno)
 
 $ # Prepend the generated changelog to `CHANGELOG.md`
 $ echo -e "$(changelog -p node)\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
