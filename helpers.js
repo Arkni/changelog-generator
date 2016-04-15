@@ -7,7 +7,7 @@ var readPkg = require('read-pkg-up').sync;
 var semver = require('semver');
 var stripEof = require('strip-eof');
 
-var Helpers = {
+module.exports = {
 	capitalize: function (str) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	},
@@ -51,6 +51,26 @@ var Helpers = {
 		return commits.map(function (commit) {
 			return '  * ' + commit;
 		}).join('\n') + '\n\n';
+	},
+
+	getHeader: function (header, release) {
+		header = header || '{release} / {date}\n==================\n\n';
+		return header
+			.replace('{release}', release)
+			.replace('{date}', this.today());
+	},
+
+	getHomePage: function () {
+		var originUrl = this.exec('git config --get remote.origin.url');
+		var regex = /^git@[^:]+:[^\/]+\/.+/i;
+
+		if (regex.test(originUrl)) {
+			originUrl = originUrl
+				.replace(':', '/')
+				.replace('git@', 'https://');
+		}
+
+		return originUrl.replace('.git', '/');
 	},
 
 	getLog: function (commitish, format) {
@@ -100,19 +120,6 @@ var Helpers = {
 		return version.replace('-pre', '');
 	},
 
-	getHomePage: function () {
-		var originUrl = this.exec('git config --get remote.origin.url');
-		var regex = /^git@[^:]+:[^\/]+\/.+/i;
-
-		if (regex.test(originUrl)) {
-			originUrl = originUrl
-				.replace(':', '/')
-				.replace('git@', 'https://');
-		}
-
-		return originUrl.replace('.git', '/');
-	},
-
 	log: function (msg) {
 		if (!this.verbose) {
 			return;
@@ -135,5 +142,3 @@ var Helpers = {
 		console.log(chalk.yellow('WARN: ' + msg));
 	}
 };
-
-module.exports = Helpers;

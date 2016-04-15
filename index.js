@@ -47,9 +47,8 @@ module.exports = function (opts) {
 
 	H.section('Generating changelog');
 
-	var release = H.getVersion(opts.release);
-	var output = release + ' / ' + H.today() + '\n==================\n\n';
-	output += formater(commits, H.getHomePage());
+	var output = H.getHeader(formater.header, H.getVersion(opts.release));
+	output += formater(commits);
 
 	H.log(chalk.green('Done!') + '\n');
 
