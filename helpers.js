@@ -13,7 +13,9 @@ module.exports = {
 	},
 
 	checkDirectory: function (dir) {
-		if (!fs.existsSync(dir)) {
+		try {
+			fs.statSync(dir);
+		} catch (e) {
 			this.error('no such file or directory: ' + dir, 1);
 		}
 
