@@ -37,6 +37,7 @@ module.exports = {
 		var err = chalk.red.bold;
 		console.log(err(msg));
 		console.log(err('Aborting.'));
+		/* eslint xo/no-process-exit: 0 */
 		process.exit(code);
 	},
 
