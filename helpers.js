@@ -56,10 +56,10 @@ module.exports = {
 	},
 
 	getHeader: function (header, release) {
-		header = header || '{release} / {date}\n==================\n\n';
+		header = header || '@RELEASE / @DATE\n==================\n\n';
 		return header
-			.replace('{release}', release)
-			.replace('{date}', this.today());
+			.replace('@RELEASE', release)
+			.replace('@DATE', this.today());
 	},
 
 	getHomePage: function () {

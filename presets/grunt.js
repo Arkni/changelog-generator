@@ -6,4 +6,4 @@ var preset = module.exports = function (commits) {
 	}).join('\n');
 };
 
-preset.header = '{release}:\n  date: {date}\n';
+preset.header = '@RELEASE:\n  date: @DATE\n';
