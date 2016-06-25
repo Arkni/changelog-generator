@@ -1,6 +1,7 @@
 'use strict';
 
 var homePage = require('../helpers').getHomePage();
+
 var preset = function (commits) {
 	return commits.map(function (commit) {
 		return '* ' + commit

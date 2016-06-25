@@ -26,7 +26,7 @@ module.exports = function (opts) {
 
 	H.section('Checking preset');
 
-	var preset = opts.preset && opts.preset.trim() || '';
+	var preset = opts.preset ? opts.preset.trim() : '';
 	var formater;
 	if (preset) {
 		try {
@@ -42,7 +42,7 @@ module.exports = function (opts) {
 
 	H.section('Gathering commits');
 
-	var commitish = opts.commitish && opts.commitish.trim() || '';
+	var commitish = opts.commitish ? opts.commitish.trim() : '';
 	var commits = H.getLog(commitish, formater.format).split(/\r?\n/);
 
 	H.section('Generating changelog');

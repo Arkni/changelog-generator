@@ -15,7 +15,7 @@ module.exports = {
 	checkDirectory: function (dir) {
 		try {
 			fs.statSync(dir);
-		} catch (e) {
+		} catch (err) {
 			this.error('no such file or directory: ' + dir, 1);
 		}
 
@@ -44,8 +44,8 @@ module.exports = {
 		try {
 			var rs = execSync(cmd, opts);
 			return rs && stripEof(rs).toString();
-		} catch (e) {
-			this.error(msg || stripEof(e.stderr).toString().split(/\r?\n/)[0], e.status || 1);
+		} catch (err) {
+			this.error(msg || stripEof(err.stderr).toString().split(/\r?\n/)[0], err.status || 1);
 		}
 	},
 
@@ -101,7 +101,7 @@ module.exports = {
 		try {
 			commithash = execSync('git rev-list --tags --max-count=1',
 						{stdio: ['ignore', 'pipe', 'ignore']});
-		} catch (e) {
+		} catch (err) {
 			return '';
 		}
 
@@ -118,7 +118,7 @@ module.exports = {
 		}
 
 		var pkg = readPkg().pkg;
-		var version = pkg && pkg.version || 'x.x.x';
+		var version = pkg ? pkg.version : 'x.x.x';
 		return version.replace('-pre', '');
 	},
 
